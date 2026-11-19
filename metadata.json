@@ -1,0 +1,6 @@
+{
+  "name": "Luiz Jiu-Jítsu Timer",
+  "description": "Cronômetro profissional para academias de Jiu-Jítsu e Android TV com presets oficiais CBJJ/IBJJF, navegação D-Pad e sintetizador sonoro offline.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
