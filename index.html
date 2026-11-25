@@ -978,24 +978,62 @@
 
         <!-- 3. Avisos Sonoros Programáveis -->
         <div class="settings-section">
-          <h3 class="section-heading">3. Avisos Sonoros Programáveis (Sintetizador Offline)</h3>
+          <h3 class="section-heading">3. Avisos Sonoros Programáveis (Áudio Próprio ou Sintetizador)</h3>
           <div class="rows-stack">
             <div class="setting-row">
               <div class="row-info">
-                <span class="row-label">Perfil Sonoro</span>
-                <span class="row-desc">Timbre do gongo e da buzina gerados offline pela TV</span>
+                <span class="row-label">Perfil Sonoro (Sintetizador Padrão)</span>
+                <span class="row-desc">Usado automaticamente sempre que um evento não tiver áudio próprio enviado</span>
               </div>
               <div class="row-controls">
+                <button class="action-chip-btn" type="button" data-focusable="true" data-sound-profile="arena">Arena (Apito de Árbitro)</button>
                 <button class="action-chip-btn" type="button" data-focusable="true" data-sound-profile="classic">Clássico (Gongo + Buzina)</button>
-                <button class="action-chip-btn" type="button" data-focusable="true" data-sound-profile="arena">Arena (Corneta + Apito)</button>
                 <button class="action-chip-btn" type="button" data-focusable="true" data-sound-profile="digital">Digital (Tons Limpos)</button>
+              </div>
+            </div>
+
+            <input id="audio-file-input" class="hidden-file-input" type="file" accept="audio/mpeg,audio/wav,audio/x-wav,audio/ogg,audio/mp4,audio/aac,audio/webm,audio/flac,.mp3,.wav,.ogg,.m4a,.aac,.webm,.flac" />
+
+            <div class="setting-row">
+              <div class="row-info">
+                <span class="row-label">Áudio Personalizado — Início do Round</span>
+                <span id="status-audio-start" class="row-desc">Padrão (Sintetizador) · MP3, WAV, OGG ou M4A (máx. 3 MB)</span>
+              </div>
+              <div class="row-controls">
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-upload="start">Enviar Áudio</button>
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-test="start">Testar</button>
+                <button id="btn-reset-audio-start" class="action-chip-btn is-danger" type="button" data-focusable="true" data-audio-reset="start">Usar Padrão</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="row-info">
+                <span class="row-label">Áudio Personalizado — Fim de Round</span>
+                <span id="status-audio-roundEnd" class="row-desc">Padrão (Sintetizador) · MP3, WAV, OGG ou M4A (máx. 3 MB)</span>
+              </div>
+              <div class="row-controls">
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-upload="roundEnd">Enviar Áudio</button>
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-test="roundEnd">Testar</button>
+                <button id="btn-reset-audio-roundEnd" class="action-chip-btn is-danger" type="button" data-focusable="true" data-audio-reset="roundEnd">Usar Padrão</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="row-info">
+                <span class="row-label">Áudio Personalizado — Fim de Treino</span>
+                <span id="status-audio-workoutEnd" class="row-desc">Padrão (Sintetizador) · MP3, WAV, OGG ou M4A (máx. 3 MB)</span>
+              </div>
+              <div class="row-controls">
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-upload="workoutEnd">Enviar Áudio</button>
+                <button class="action-chip-btn" type="button" data-focusable="true" data-audio-test="workoutEnd">Testar</button>
+                <button id="btn-reset-audio-workoutEnd" class="action-chip-btn is-danger" type="button" data-focusable="true" data-audio-reset="workoutEnd">Usar Padrão</button>
               </div>
             </div>
 
             <div class="setting-row">
               <div class="row-info">
                 <span class="row-label">Alerta Pré-Fim Programável</span>
-                <span class="row-desc">Bipes agudos nos últimos segundos antes do gongo final (padrão: 3s)</span>
+                <span class="row-desc">Bipes agudos nos últimos segundos antes do sinal final (padrão: 3s)</span>
               </div>
               <div class="row-controls">
                 <div class="stepper-group">
@@ -1021,7 +1059,7 @@
             <div class="setting-row">
               <div class="row-info">
                 <span class="row-label">Volume e Teste de Áudio</span>
-                <span class="row-desc">Ajuste a intensidade e teste os toques no alto-falante da TV</span>
+                <span class="row-desc">Controla o volume dos áudios personalizados e do sintetizador na TV</span>
               </div>
               <div class="row-controls">
                 <div class="stepper-group">
@@ -1029,9 +1067,10 @@
                   <span id="val-volume" class="step-val">90%</span>
                   <button class="step-btn" type="button" data-focusable="true" data-action="volume" data-delta="10" aria-label="Aumentar volume">+</button>
                 </div>
-                <button id="btn-test-gong" class="action-chip-btn" type="button" data-focusable="true">Testar Gongo</button>
+                <button id="btn-test-gong" class="action-chip-btn" type="button" data-focusable="true">Testar Início</button>
                 <button id="btn-test-beep" class="action-chip-btn" type="button" data-focusable="true">Testar Bipes</button>
-                <button id="btn-test-end" class="action-chip-btn" type="button" data-focusable="true">Testar Buzina</button>
+                <button id="btn-test-end" class="action-chip-btn" type="button" data-focusable="true">Testar Fim de Round</button>
+                <button id="btn-test-workout-end" class="action-chip-btn" type="button" data-focusable="true">Testar Fim de Treino</button>
               </div>
             </div>
           </div>
@@ -1087,7 +1126,7 @@
             <div class="setting-row">
               <div class="row-info">
                 <span class="row-label">Empacotamento para Android TV (APK)</span>
-                <span class="row-desc">Gera uma cópia HTML única offline com CSP estrito pronta para WebView / APK</span>
+                <span class="row-desc">Gera cópia HTML única offline (já com seus áudios personalizados embutidos) pronta para APK</span>
               </div>
               <div class="row-controls">
                 <button id="btn-export-apk" class="action-chip-btn is-export" type="button" data-focusable="true">
@@ -1106,6 +1145,22 @@
       'use strict';
 
       var STORAGE_KEY = 'luiz_jj_timer_config_v1';
+      var AUDIO_DB_NAME = 'luiz_jj_timer_media_v1';
+      var AUDIO_STORE_NAME = 'sounds';
+      var AUDIO_SLOTS = Object.freeze(['start', 'roundEnd', 'workoutEnd']);
+      var AUDIO_SLOT_LABELS = Object.freeze({
+        start: 'Início do Round',
+        roundEnd: 'Fim de Round',
+        workoutEnd: 'Fim de Treino'
+      });
+      var MAX_AUDIO_FILE_BYTES = 3 * 1024 * 1024;
+      var MAX_AUDIO_BASE64_LEN = 4200000;
+      var BASE64_RE = /^[A-Za-z0-9+/=]+$/;
+      var ALLOWED_AUDIO_MIMES = Object.freeze([
+        'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/wave',
+        'audio/ogg', 'audio/mp4', 'audio/x-m4a', 'audio/aac', 'audio/webm', 'audio/flac'
+      ]);
+      var ALLOWED_AUDIO_EXT_RE = /\.(mp3|wav|ogg|m4a|aac|webm|flac)$/i;
       var MAX_LOGO_FILE_BYTES = 5 * 1024 * 1024;
       var MAX_LOGO_DATAURL_LEN = 350000;
       var PNG_DATAURL_RE = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/;
@@ -1136,7 +1191,7 @@
         totalRounds: 10, // 0 = Infinito
         preEndAlertSeconds: 3,
         thirtySecWarning: true,
-        soundProfile: 'classic',
+        soundProfile: 'arena',
         volume: 90,
         customLogo: null,
         orientation: 'landscape',
@@ -1194,6 +1249,14 @@
         btnTestGong: document.getElementById('btn-test-gong'),
         btnTestBeep: document.getElementById('btn-test-beep'),
         btnTestEnd: document.getElementById('btn-test-end'),
+        btnTestWorkoutEnd: document.getElementById('btn-test-workout-end'),
+        audioFileInput: document.getElementById('audio-file-input'),
+        statusAudioStart: document.getElementById('status-audio-start'),
+        statusAudioRoundEnd: document.getElementById('status-audio-roundEnd'),
+        statusAudioWorkoutEnd: document.getElementById('status-audio-workoutEnd'),
+        btnResetAudioStart: document.getElementById('btn-reset-audio-start'),
+        btnResetAudioRoundEnd: document.getElementById('btn-reset-audio-roundEnd'),
+        btnResetAudioWorkoutEnd: document.getElementById('btn-reset-audio-workoutEnd'),
         logoFileInput: document.getElementById('logo-file-input'),
         btnUploadLogo: document.getElementById('btn-upload-logo'),
         btnResetLogo: document.getElementById('btn-reset-logo'),
@@ -1528,6 +1591,14 @@
           }
           var safeGain = Math.max(0.05, Math.min(1.0, config.volume / 100));
           sharedMasterGain.gain.setValueAtTime(safeGain, audioCtx.currentTime);
+          AUDIO_SLOTS.forEach(function (slot) {
+            if (customAudioStore[slot] && !customAudioStore[slot].buffer && !customAudioStore[slot]._decoding) {
+              customAudioStore[slot]._decoding = true;
+              decodeSlotAudioBuffer(audioCtx, slot).then(function () {
+                if (customAudioStore[slot]) customAudioStore[slot]._decoding = false;
+              });
+            }
+          });
           return audioCtx;
         } catch (err) {
           return null;
@@ -1574,80 +1645,401 @@
         }
       }
 
+      // -----------------------------------------------------------------------
+      // Custom Audio Storage (IndexedDB + Embedded APK JSON + Zero-Latency Cache)
+      // -----------------------------------------------------------------------
+      var customAudioStore = {
+        start: null,      // { name: string, base64: string, buffer: AudioBuffer | null }
+        roundEnd: null,
+        workoutEnd: null
+      };
+      var pendingUploadAudioSlot = null;
+      var activeCustomSource = null;
+
+      function sanitizeAudioFileName(name) {
+        var clean = String(name || 'audio_personalizado').replace(/[\r\n\t<>]/g, '').trim();
+        return clean ? clean.slice(0, 60) : 'audio_personalizado';
+      }
+
+      function isSafeBase64Audio(str) {
+        return typeof str === 'string' && str.length > 16 && str.length <= MAX_AUDIO_BASE64_LEN && BASE64_RE.test(str);
+      }
+
+      function arrayBufferToBase64(buffer) {
+        var bytes = new Uint8Array(buffer);
+        var chunkSize = 0x8000;
+        var binary = [];
+        for (var i = 0; i < bytes.length; i += chunkSize) {
+          var slice = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
+          binary.push(String.fromCharCode.apply(null, slice));
+        }
+        return btoa(binary.join(''));
+      }
+
+      function base64ToArrayBuffer(base64) {
+        var binary = atob(base64);
+        var len = binary.length;
+        var bytes = new Uint8Array(len);
+        for (var i = 0; i < len; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes.buffer;
+      }
+
+      function openAudioDb() {
+        return new Promise(function (resolve) {
+          if (!('indexedDB' in window)) {
+            resolve(null);
+            return;
+          }
+          try {
+            var req = indexedDB.open(AUDIO_DB_NAME, 1);
+            req.onupgradeneeded = function (ev) {
+              var db = ev.target.result;
+              if (!db.objectStoreNames.contains(AUDIO_STORE_NAME)) {
+                db.createObjectStore(AUDIO_STORE_NAME, { keyPath: 'slot' });
+              }
+            };
+            req.onsuccess = function (ev) {
+              resolve(ev.target.result);
+            };
+            req.onerror = function () {
+              resolve(null);
+            };
+          } catch (err) {
+            resolve(null);
+          }
+        });
+      }
+
+      function saveAudioRecordToDb(record) {
+        return openAudioDb().then(function (db) {
+          if (!db) return;
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction(AUDIO_STORE_NAME, 'readwrite');
+              tx.objectStore(AUDIO_STORE_NAME).put(record);
+              tx.oncomplete = function () { resolve(); };
+              tx.onerror = function () { resolve(); };
+            } catch (err) {
+              resolve();
+            }
+          });
+        });
+      }
+
+      function readAllAudioRecordsFromDb() {
+        return openAudioDb().then(function (db) {
+          if (!db) return {};
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction(AUDIO_STORE_NAME, 'readonly');
+              var req = tx.objectStore(AUDIO_STORE_NAME).getAll();
+              req.onsuccess = function () {
+                var map = {};
+                var rows = req.result || [];
+                rows.forEach(function (r) {
+                  if (r && AUDIO_SLOTS.indexOf(r.slot) !== -1) {
+                    map[r.slot] = r;
+                  }
+                });
+                resolve(map);
+              };
+              req.onerror = function () { resolve({}); };
+            } catch (err) {
+              resolve({});
+            }
+          });
+        });
+      }
+
+      function readEmbeddedApkAudio() {
+        var map = {};
+        try {
+          var node = document.getElementById('embedded-custom-audio');
+          if (!node || !node.textContent) return map;
+          var parsed = JSON.parse(node.textContent);
+          if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return map;
+          AUDIO_SLOTS.forEach(function (slot) {
+            if (hasOwn(parsed, slot) && parsed[slot] && typeof parsed[slot] === 'object') {
+              var entry = parsed[slot];
+              if (isSafeBase64Audio(entry.base64)) {
+                map[slot] = {
+                  slot: slot,
+                  name: sanitizeAudioFileName(entry.name),
+                  base64: entry.base64
+                };
+              }
+            }
+          });
+        } catch (err) {
+          // Ignore malformed embedded payload
+        }
+        return map;
+      }
+
+      function decodeSlotAudioBuffer(ctx, slot) {
+        var entry = customAudioStore[slot];
+        if (!entry || !entry.base64) return Promise.resolve(null);
+        if (entry.buffer) return Promise.resolve(entry.buffer);
+        try {
+          var rawBuffer = base64ToArrayBuffer(entry.base64);
+          return ctx.decodeAudioData(rawBuffer).then(function (decoded) {
+            if (customAudioStore[slot] === entry) {
+              entry.buffer = decoded;
+            }
+            return decoded;
+          }).catch(function () {
+            return null;
+          });
+        } catch (err) {
+          return Promise.resolve(null);
+        }
+      }
+
+      function hydrateCustomAudioOnBoot() {
+        var embedded = readEmbeddedApkAudio();
+        readAllAudioRecordsFromDb().then(function (dbMap) {
+          AUDIO_SLOTS.forEach(function (slot) {
+            var dbEntry = dbMap[slot];
+            if (dbEntry) {
+              if (!dbEntry.cleared && isSafeBase64Audio(dbEntry.base64)) {
+                customAudioStore[slot] = {
+                  name: sanitizeAudioFileName(dbEntry.name),
+                  base64: dbEntry.base64,
+                  buffer: null
+                };
+              } else {
+                customAudioStore[slot] = null;
+              }
+            } else if (embedded[slot]) {
+              customAudioStore[slot] = {
+                name: embedded[slot].name,
+                base64: embedded[slot].base64,
+                buffer: null
+              };
+            }
+          });
+          renderCustomAudioStatuses();
+        });
+      }
+
+      function renderCustomAudioStatuses() {
+        var statusEls = {
+          start: dom.statusAudioStart,
+          roundEnd: dom.statusAudioRoundEnd,
+          workoutEnd: dom.statusAudioWorkoutEnd
+        };
+        var resetBtns = {
+          start: dom.btnResetAudioStart,
+          roundEnd: dom.btnResetAudioRoundEnd,
+          workoutEnd: dom.btnResetAudioWorkoutEnd
+        };
+        AUDIO_SLOTS.forEach(function (slot) {
+          var entry = customAudioStore[slot];
+          var el = statusEls[slot];
+          var resetBtn = resetBtns[slot];
+          if (el) {
+            if (entry) {
+              el.textContent = 'Personalizado: ' + entry.name;
+            } else {
+              el.textContent = 'Padrão (Sintetizador) · MP3, WAV, OGG ou M4A (máx. 3 MB)';
+            }
+          }
+          if (resetBtn) {
+            resetBtn.classList.toggle('btn-disabled', !entry);
+          }
+        });
+      }
+
+      function stopActiveCustomAudio() {
+        if (activeCustomSource) {
+          try {
+            activeCustomSource.stop(0);
+          } catch (err) {
+            // Already stopped
+          }
+          activeCustomSource = null;
+        }
+      }
+
+      function playCustomAudioSlot(ctx, out, slot, onFallback) {
+        var entry = customAudioStore[slot];
+        if (!entry) return false;
+
+        if (entry.buffer) {
+          stopActiveCustomAudio();
+          var src = ctx.createBufferSource();
+          src.buffer = entry.buffer;
+          src.connect(out);
+          src.onended = function () {
+            if (activeCustomSource === src) activeCustomSource = null;
+          };
+          activeCustomSource = src;
+          src.start(ctx.currentTime);
+          return true;
+        }
+
+        decodeSlotAudioBuffer(ctx, slot).then(function (decoded) {
+          if (decoded) {
+            stopActiveCustomAudio();
+            var src = ctx.createBufferSource();
+            src.buffer = decoded;
+            src.connect(out);
+            src.onended = function () {
+              if (activeCustomSource === src) activeCustomSource = null;
+            };
+            activeCustomSource = src;
+            src.start(ctx.currentTime);
+          } else if (typeof onFallback === 'function') {
+            onFallback();
+          }
+        });
+        return true;
+      }
+
+      function playArenaWhistleBlast(ctx, out, startTime, sustainDur) {
+        var attack = 0.02;
+        var release = 0.2;
+        var stopTime = startTime + sustainDur + release + 0.02;
+
+        var osc1 = ctx.createOscillator();
+        var osc2 = ctx.createOscillator();
+        var lfo = ctx.createOscillator();
+        var lfoGain = ctx.createGain();
+        var gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(2680, startTime);
+        osc2.frequency.setValueAtTime(2765, startTime);
+
+        lfo.frequency.setValueAtTime(34, startTime);
+        lfoGain.gain.setValueAtTime(75, startTime);
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc1.frequency);
+
+        gain.gain.setValueAtTime(0.001, startTime);
+        gain.gain.linearRampToValueAtTime(0.75, startTime + attack);
+        gain.gain.setValueAtTime(0.75, startTime + sustainDur);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + sustainDur + release);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(out);
+
+        lfo.start(startTime);
+        osc1.start(startTime);
+        osc2.start(startTime);
+        lfo.stop(stopTime);
+        osc1.stop(stopTime);
+        osc2.stop(stopTime);
+      }
+
+      function playSynthStartRoundSound(ctx, out) {
+        var now = ctx.currentTime;
+        if (config.soundProfile === 'classic') {
+          var partials = [
+            { freq: 210, amp: 0.7, dur: 2.3 },
+            { freq: 318, amp: 0.5, dur: 1.9 },
+            { freq: 446, amp: 0.4, dur: 1.5 },
+            { freq: 624, amp: 0.3, dur: 1.1 },
+            { freq: 882, amp: 0.2, dur: 0.8 }
+          ];
+          partials.forEach(function (p) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(p.freq, now);
+            osc.frequency.exponentialRampToValueAtTime(p.freq * 0.985, now + p.dur);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(p.amp, now + 0.008);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + p.dur);
+            osc.connect(gain);
+            gain.connect(out);
+            osc.start(now);
+            osc.stop(now + p.dur + 0.05);
+          });
+        } else if (config.soundProfile === 'arena') {
+          // Normal referee whistle blast at round start
+          playArenaWhistleBlast(ctx, out, now, 0.45);
+        } else {
+          [0, 0.14].forEach(function (offset, idx) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(idx === 0 ? 880 : 1318.5, now + offset);
+            gain.gain.setValueAtTime(0.001, now + offset);
+            gain.gain.linearRampToValueAtTime(0.5, now + offset + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.28);
+            osc.connect(gain);
+            gain.connect(out);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.3);
+          });
+        }
+      }
+
+      function playSynthEndRoundSound(ctx, out, isWorkoutEnd) {
+        var now = ctx.currentTime;
+
+        if (config.soundProfile === 'arena') {
+          if (isWorkoutEnd) {
+            // Double referee whistle ("Silvo duplo") signaling workout completion
+            playArenaWhistleBlast(ctx, out, now, 0.36);
+            playArenaWhistleBlast(ctx, out, now + 0.64, 0.95);
+          } else {
+            // Longer referee whistle ("Silvo longo") signaling end of round
+            playArenaWhistleBlast(ctx, out, now, 1.05);
+          }
+          return;
+        }
+
+        var pulses = isWorkoutEnd ? [0, 0.42, 0.84] : [0];
+        pulses.forEach(function (offset) {
+          var t = now + offset;
+          if (config.soundProfile === 'classic') {
+            [140, 210, 280].forEach(function (freq, i) {
+              var osc = ctx.createOscillator();
+              var gain = ctx.createGain();
+              osc.type = i === 0 ? 'sawtooth' : 'square';
+              osc.frequency.setValueAtTime(freq, t);
+              gain.gain.setValueAtTime(0.001, t);
+              gain.gain.linearRampToValueAtTime(0.32, t + 0.015);
+              gain.gain.setValueAtTime(0.32, t + 0.28);
+              gain.gain.exponentialRampToValueAtTime(0.001, t + 0.36);
+              osc.connect(gain);
+              gain.connect(out);
+              osc.start(t);
+              osc.stop(t + 0.38);
+            });
+          } else {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(440, t);
+            gain.gain.setValueAtTime(0.001, t);
+            gain.gain.linearRampToValueAtTime(0.6, t + 0.01);
+            gain.gain.setValueAtTime(0.6, t + 0.26);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+            osc.connect(gain);
+            gain.connect(out);
+            osc.start(t);
+            osc.stop(t + 0.36);
+          }
+        });
+      }
+
       function playStartRoundSound() {
         try {
           var ctx = ensureAudio();
           if (!ctx || !sharedMasterGain) return;
           var out = sharedMasterGain;
-          var now = ctx.currentTime;
-
-          if (config.soundProfile === 'classic') {
-            var partials = [
-              { freq: 210, amp: 0.7, dur: 2.3 },
-              { freq: 318, amp: 0.5, dur: 1.9 },
-              { freq: 446, amp: 0.4, dur: 1.5 },
-              { freq: 624, amp: 0.3, dur: 1.1 },
-              { freq: 882, amp: 0.2, dur: 0.8 }
-            ];
-            partials.forEach(function (p) {
-              var osc = ctx.createOscillator();
-              var gain = ctx.createGain();
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(p.freq, now);
-              osc.frequency.exponentialRampToValueAtTime(p.freq * 0.985, now + p.dur);
-              gain.gain.setValueAtTime(0.001, now);
-              gain.gain.linearRampToValueAtTime(p.amp, now + 0.008);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + p.dur);
-              osc.connect(gain);
-              gain.connect(out);
-              osc.start(now);
-              osc.stop(now + p.dur + 0.05);
-            });
-          } else if (config.soundProfile === 'arena') {
-            var osc1 = ctx.createOscillator();
-            var osc2 = ctx.createOscillator();
-            var lfo = ctx.createOscillator();
-            var lfoGain = ctx.createGain();
-            var gain = ctx.createGain();
-
-            osc1.type = 'sine';
-            osc2.type = 'triangle';
-            osc1.frequency.setValueAtTime(2680, now);
-            osc2.frequency.setValueAtTime(2765, now);
-
-            lfo.frequency.setValueAtTime(34, now);
-            lfoGain.gain.setValueAtTime(75, now);
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc1.frequency);
-
-            gain.gain.setValueAtTime(0.001, now);
-            gain.gain.linearRampToValueAtTime(0.75, now + 0.02);
-            gain.gain.setValueAtTime(0.75, now + 0.45);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-
-            osc1.connect(gain);
-            osc2.connect(gain);
-            gain.connect(out);
-            lfo.start(now);
-            osc1.start(now);
-            osc2.start(now);
-            lfo.stop(now + 0.66);
-            osc1.stop(now + 0.66);
-            osc2.stop(now + 0.66);
-          } else {
-            [0, 0.14].forEach(function (offset, idx) {
-              var osc = ctx.createOscillator();
-              var gain = ctx.createGain();
-              osc.type = 'square';
-              osc.frequency.setValueAtTime(idx === 0 ? 880 : 1318.5, now + offset);
-              gain.gain.setValueAtTime(0.001, now + offset);
-              gain.gain.linearRampToValueAtTime(0.5, now + offset + 0.01);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.28);
-              osc.connect(gain);
-              gain.connect(out);
-              osc.start(now + offset);
-              osc.stop(now + offset + 0.3);
-            });
+          var playedCustom = playCustomAudioSlot(ctx, out, 'start', function () {
+            playSynthStartRoundSound(ctx, out);
+          });
+          if (!playedCustom) {
+            playSynthStartRoundSound(ctx, out);
           }
         } catch (err) {
           // Never interrupt timer loop on audio hardware error
@@ -1659,60 +2051,13 @@
           var ctx = ensureAudio();
           if (!ctx || !sharedMasterGain) return;
           var out = sharedMasterGain;
-          var now = ctx.currentTime;
-          var pulses = isWorkoutEnd ? [0, 0.42, 0.84] : [0];
-
-          pulses.forEach(function (offset) {
-            var t = now + offset;
-            if (config.soundProfile === 'classic') {
-              [140, 210, 280].forEach(function (freq, i) {
-                var osc = ctx.createOscillator();
-                var gain = ctx.createGain();
-                osc.type = i === 0 ? 'sawtooth' : 'square';
-                osc.frequency.setValueAtTime(freq, t);
-                gain.gain.setValueAtTime(0.001, t);
-                gain.gain.linearRampToValueAtTime(0.32, t + 0.015);
-                gain.gain.setValueAtTime(0.32, t + 0.28);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.36);
-                osc.connect(gain);
-                gain.connect(out);
-                osc.start(t);
-                osc.stop(t + 0.38);
-              });
-            } else if (config.soundProfile === 'arena') {
-              [370, 466.16].forEach(function (freq) {
-                var osc = ctx.createOscillator();
-                var filter = ctx.createBiquadFilter();
-                var gain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(freq, t);
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(2200, t);
-                gain.gain.setValueAtTime(0.001, t);
-                gain.gain.linearRampToValueAtTime(0.45, t + 0.02);
-                gain.gain.setValueAtTime(0.45, t + 0.28);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(out);
-                osc.start(t);
-                osc.stop(t + 0.4);
-              });
-            } else {
-              var osc = ctx.createOscillator();
-              var gain = ctx.createGain();
-              osc.type = 'sawtooth';
-              osc.frequency.setValueAtTime(440, t);
-              gain.gain.setValueAtTime(0.001, t);
-              gain.gain.linearRampToValueAtTime(0.6, t + 0.01);
-              gain.gain.setValueAtTime(0.6, t + 0.26);
-              gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-              osc.connect(gain);
-              gain.connect(out);
-              osc.start(t);
-              osc.stop(t + 0.36);
-            }
+          var slot = isWorkoutEnd ? 'workoutEnd' : 'roundEnd';
+          var playedCustom = playCustomAudioSlot(ctx, out, slot, function () {
+            playSynthEndRoundSound(ctx, out, isWorkoutEnd);
           });
+          if (!playedCustom) {
+            playSynthEndRoundSound(ctx, out, isWorkoutEnd);
+          }
         } catch (err) {
           // Never interrupt timer loop on audio hardware error
         }
@@ -2018,6 +2363,8 @@
         presetCards.forEach(function (card) {
           card.classList.toggle('is-active', card.getAttribute('data-preset-id') === config.activePresetId);
         });
+
+        renderCustomAudioStatuses();
       }
 
       // -----------------------------------------------------------------------
@@ -2129,6 +2476,118 @@
 
       dom.btnTestEnd.addEventListener('click', function () {
         playEndRoundSound(false);
+      });
+
+      dom.btnTestWorkoutEnd.addEventListener('click', function () {
+        playEndRoundSound(true);
+      });
+
+      // Custom audio upload, test, and reset handlers (3 slots: start, roundEnd, workoutEnd)
+      document.querySelectorAll('[data-audio-upload]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var slot = btn.getAttribute('data-audio-upload');
+          if (AUDIO_SLOTS.indexOf(slot) === -1) return;
+          pendingUploadAudioSlot = slot;
+          dom.audioFileInput.click();
+        });
+      });
+
+      document.querySelectorAll('[data-audio-test]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var slot = btn.getAttribute('data-audio-test');
+          if (slot === 'start') {
+            playStartRoundSound();
+          } else if (slot === 'roundEnd') {
+            playEndRoundSound(false);
+          } else if (slot === 'workoutEnd') {
+            playEndRoundSound(true);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-audio-reset]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var slot = btn.getAttribute('data-audio-reset');
+          if (AUDIO_SLOTS.indexOf(slot) === -1) return;
+          stopActiveCustomAudio();
+          customAudioStore[slot] = null;
+          saveAudioRecordToDb({ slot: slot, cleared: true });
+          renderCustomAudioStatuses();
+          showToast('Som padrão restaurado: ' + AUDIO_SLOT_LABELS[slot]);
+        });
+      });
+
+      dom.audioFileInput.addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        var slot = pendingUploadAudioSlot;
+        e.target.value = '';
+        pendingUploadAudioSlot = null;
+
+        if (!file || AUDIO_SLOTS.indexOf(slot) === -1) return;
+
+        var mimeAllowed = file.type && ALLOWED_AUDIO_MIMES.indexOf(file.type.toLowerCase()) !== -1;
+        var extAllowed = ALLOWED_AUDIO_EXT_RE.test(file.name || '');
+        if (!mimeAllowed && !extAllowed) {
+          showToast('Formato inválido. Use MP3, WAV, OGG, M4A, WebM ou FLAC.');
+          return;
+        }
+
+        if (file.size <= 0 || file.size > MAX_AUDIO_FILE_BYTES) {
+          showToast('Áudio muito grande. Limite máximo: 3 MB por som.');
+          return;
+        }
+
+        var ctx = ensureAudio();
+        if (!ctx) {
+          showToast('Áudio indisponível neste dispositivo.');
+          return;
+        }
+
+        var reader = new FileReader();
+        reader.onerror = function () {
+          showToast('Erro ao ler o arquivo de áudio.');
+        };
+        reader.onload = function (ev) {
+          var rawBuf = ev.target && ev.target.result;
+          if (!(rawBuf instanceof ArrayBuffer) || rawBuf.byteLength === 0) {
+            showToast('Arquivo de áudio inválido ou vazio.');
+            return;
+          }
+
+          var base64;
+          try {
+            base64 = arrayBufferToBase64(rawBuf);
+          } catch (err) {
+            showToast('Falha ao codificar arquivo de áudio.');
+            return;
+          }
+
+          if (!isSafeBase64Audio(base64)) {
+            showToast('Arquivo excedeu o tamanho seguro permitido.');
+            return;
+          }
+
+          // Validate audio integrity via real Web Audio decoding before persisting
+          ctx.decodeAudioData(rawBuf.slice(0)).then(function (decodedBuffer) {
+            var safeName = sanitizeAudioFileName(file.name);
+            customAudioStore[slot] = {
+              name: safeName,
+              base64: base64,
+              buffer: decodedBuffer
+            };
+            saveAudioRecordToDb({
+              slot: slot,
+              name: safeName,
+              base64: base64,
+              cleared: false
+            });
+            renderCustomAudioStatuses();
+            showToast('Áudio salvo para ' + AUDIO_SLOT_LABELS[slot] + '!');
+          }).catch(function () {
+            showToast('Não foi possível decodificar este arquivo de áudio.');
+          });
+        };
+        reader.readAsArrayBuffer(file);
       });
 
       dom.btnUploadLogo.addEventListener('click', function () {
@@ -2249,6 +2708,30 @@
             scr.parentNode.removeChild(scr);
           }
         });
+
+        // Embed uploaded custom audio files safely inside an inert JSON data block for offline APK playback
+        var embeddedPayload = {};
+        var embeddedCount = 0;
+        AUDIO_SLOTS.forEach(function (slot) {
+          var entry = customAudioStore[slot];
+          if (entry && isSafeBase64Audio(entry.base64)) {
+            embeddedPayload[slot] = {
+              name: entry.name,
+              base64: entry.base64
+            };
+            embeddedCount += 1;
+          }
+        });
+        if (embeddedCount > 0) {
+          var coreScriptClone = clone.querySelector('#app-core-script');
+          var dataScript = document.createElement('script');
+          dataScript.id = 'embedded-custom-audio';
+          dataScript.type = 'application/json';
+          dataScript.textContent = JSON.stringify(embeddedPayload).replace(/</g, '\\u003c');
+          if (coreScriptClone && coreScriptClone.parentNode) {
+            coreScriptClone.parentNode.insertBefore(dataScript, coreScriptClone);
+          }
+        }
 
         // Remove any injected external stylesheets or module preloads
         Array.prototype.slice.call(clone.querySelectorAll('link[rel="stylesheet"], link[rel="modulepreload"]')).forEach(function (lnk) {
@@ -2466,6 +2949,7 @@
       updateLiveClock();
       setInterval(updateLiveClock, 10000);
       renderTimerDisplay();
+      hydrateCustomAudioOnBoot();
       requestAnimationFrame(fitTimerFont);
       setFocusElement(dom.btnStart);
     })();
