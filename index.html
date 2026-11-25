@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta id="app-csp" http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'self' ws: wss:; object-src 'none'; base-uri 'none'; form-action 'none';" />
+  <meta id="app-csp" http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'self' ws: wss:; object-src 'none'; base-uri 'none'; form-action 'none';" />
   <meta name="referrer" content="no-referrer" />
   <title>Luiz Jiu-Jítsu Timer</title>
   <meta name="description" content="Cronômetro profissional para academias de Jiu-Jítsu e Android TV com presets oficiais CBJJ/IBJJF, navegação D-Pad e avisos sonoros offline." />
@@ -11,6 +11,13 @@
   <meta property="og:description" content="Cronômetro profissional para academias de Jiu-Jítsu e Android TV com presets oficiais CBJJ/IBJJF, navegação D-Pad e avisos sonoros offline." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" href="/app-icon.png" />
+  <link rel="apple-touch-icon" href="/app-icon.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Luiz JJ" />
   <style>
     :root {
       --bg-pure: #000000;
@@ -64,14 +71,22 @@
       container-name: tv;
     }
 
-    body.is-portrait #app-viewport {
+    body.is-tv-cw #app-viewport,
+    body.is-tv-ccw #app-viewport {
       inset: auto;
       top: 50%;
       left: 50%;
       width: 100dvh;
       height: 100vw;
-      transform: translate(-50%, -50%) rotate(90deg);
       transform-origin: center center;
+    }
+
+    body.is-tv-cw #app-viewport {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    body.is-tv-ccw #app-viewport {
+      transform: translate(-50%, -50%) rotate(-90deg);
     }
 
     /* High-visibility Android TV D-Pad Focus Ring */
@@ -513,6 +528,37 @@
       line-height: 1.3;
     }
 
+    .settings-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-quick-orient {
+      display: none;
+      background: var(--color-prep);
+      color: #09090B;
+      border: 1px solid var(--color-prep);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: clamp(0.84rem, min(2.2cqw, 1.9cqh), 1.1rem);
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 44px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    body.is-tv-cw .btn-quick-orient,
+    body.is-tv-ccw .btn-quick-orient {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .btn-close-settings {
       background: #27272A;
       color: #FFFFFF;
@@ -531,6 +577,9 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
       padding: clamp(12px, 1.8cqh, 20px) 8px clamp(18px, 3cqh, 28px);
       display: flex;
       flex-direction: column;
@@ -884,9 +933,14 @@
           <h2 class="settings-title">Configurações do Treino</h2>
           <p class="settings-subtitle">Use as setas do controle remoto (D-Pad) e Enter para ajustar ou Voltar/Esc para sair.</p>
         </div>
-        <button id="btn-close-settings" class="btn-close-settings" type="button" data-focusable="true">
-          FECHAR
-        </button>
+        <div class="settings-header-actions">
+          <button id="btn-quick-reset-orient" class="btn-quick-orient" type="button" data-focusable="true">
+            NORMAL (0°)
+          </button>
+          <button id="btn-close-settings" class="btn-close-settings" type="button" data-focusable="true">
+            FECHAR
+          </button>
+        </div>
       </div>
 
       <div id="settings-scroll" class="settings-scroll">
@@ -1099,14 +1153,17 @@
             <div class="setting-row">
               <div class="row-info">
                 <span class="row-label">Orientação do Timer</span>
-                <span class="row-desc">Gira a tela em 90 graus para televisores montados na vertical</span>
+                <span class="row-desc">No celular Android deixe em Automático (acompanha o sensor sem travar). Use +90° ou −90° apenas para TV fixa na parede.</span>
               </div>
               <div class="row-controls">
-                <button id="btn-orient-landscape" class="action-chip-btn is-blue is-selected" type="button" data-focusable="true">
-                  Paisagem
+                <button id="btn-orient-auto" class="action-chip-btn is-blue is-selected" type="button" data-focusable="true">
+                  Automático (0°)
                 </button>
-                <button id="btn-orient-portrait" class="action-chip-btn is-blue" type="button" data-focusable="true">
-                  Retrato
+                <button id="btn-orient-tv-cw" class="action-chip-btn is-blue" type="button" data-focusable="true">
+                  TV Vertical (+90°)
+                </button>
+                <button id="btn-orient-tv-ccw" class="action-chip-btn is-blue" type="button" data-focusable="true">
+                  TV Vertical (−90°)
                 </button>
               </div>
             </div>
@@ -1119,6 +1176,18 @@
               <div class="row-controls">
                 <button id="btn-toggle-clock" class="action-chip-btn is-selected" type="button" data-focusable="true">
                   Exibir Relógio
+                </button>
+              </div>
+            </div>
+
+            <div id="row-pwa-install" class="setting-row">
+              <div class="row-info">
+                <span class="row-label">Instalar Aplicativo (PWA Android)</span>
+                <span id="pwa-install-desc" class="row-desc">Instale o Luiz Jiu-Jítsu Timer na tela inicial para abrir em tela cheia e 100% offline</span>
+              </div>
+              <div class="row-controls">
+                <button id="btn-install-pwa" class="action-chip-btn is-selected" type="button" data-focusable="true">
+                  Instalar App
                 </button>
               </div>
             </div>
@@ -1166,7 +1235,7 @@
       var PNG_DATAURL_RE = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/;
       var ALLOWED_UPLOAD_MIMES = Object.freeze(['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml']);
       var ALLOWED_SOUND_PROFILES = Object.freeze(['classic', 'arena', 'digital']);
-      var ALLOWED_ORIENTATIONS = Object.freeze(['landscape', 'portrait']);
+      var ALLOWED_ORIENTATIONS = Object.freeze(['auto', 'tv-cw', 'tv-ccw']);
       var ALLOWED_DURATION_TARGETS = Object.freeze(['fight', 'rest', 'prep']);
       var STRICT_OFFLINE_CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';";
 
@@ -1194,7 +1263,7 @@
         soundProfile: 'arena',
         volume: 90,
         customLogo: null,
-        orientation: 'landscape',
+        orientation: 'auto',
         showClock: true,
         activePresetId: 'branca-masters'
       });
@@ -1233,6 +1302,7 @@
         btnReset: document.getElementById('btn-reset'),
         settingsModal: document.getElementById('settings-modal'),
         settingsScroll: document.getElementById('settings-scroll'),
+        btnQuickResetOrient: document.getElementById('btn-quick-reset-orient'),
         btnCloseSettings: document.getElementById('btn-close-settings'),
         presetsGrid: document.getElementById('presets-grid'),
         valFightMin: document.getElementById('val-fight-min'),
@@ -1260,9 +1330,13 @@
         logoFileInput: document.getElementById('logo-file-input'),
         btnUploadLogo: document.getElementById('btn-upload-logo'),
         btnResetLogo: document.getElementById('btn-reset-logo'),
-        btnOrientLandscape: document.getElementById('btn-orient-landscape'),
-        btnOrientPortrait: document.getElementById('btn-orient-portrait'),
+        btnOrientAuto: document.getElementById('btn-orient-auto'),
+        btnOrientTvCw: document.getElementById('btn-orient-tv-cw'),
+        btnOrientTvCcw: document.getElementById('btn-orient-tv-ccw'),
         btnToggleClock: document.getElementById('btn-toggle-clock'),
+        rowPwaInstall: document.getElementById('row-pwa-install'),
+        pwaInstallDesc: document.getElementById('pwa-install-desc'),
+        btnInstallPwa: document.getElementById('btn-install-pwa'),
         btnExportApk: document.getElementById('btn-export-apk')
       };
 
@@ -1342,8 +1416,17 @@
         if (hasOwn(raw, 'soundProfile') && ALLOWED_SOUND_PROFILES.indexOf(raw.soundProfile) !== -1) {
           clean.soundProfile = raw.soundProfile;
         }
-        if (hasOwn(raw, 'orientation') && ALLOWED_ORIENTATIONS.indexOf(raw.orientation) !== -1) {
-          clean.orientation = raw.orientation;
+        if (hasOwn(raw, 'orientation')) {
+          if (raw.orientation === 'landscape') {
+            clean.orientation = 'auto';
+          } else if (raw.orientation === 'portrait') {
+            // Auto-recover smartphones that were trapped in legacy CSS-rotated portrait mode
+            var isVerticalScreen = typeof window !== 'undefined' && window.innerHeight > window.innerWidth;
+            var isCoarsePointer = typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+            clean.orientation = (isVerticalScreen || isCoarsePointer) ? 'auto' : 'tv-cw';
+          } else if (ALLOWED_ORIENTATIONS.indexOf(raw.orientation) !== -1) {
+            clean.orientation = raw.orientation;
+          }
         }
         if (hasOwn(raw, 'activePresetId')) {
           if (raw.activePresetId === null) {
@@ -1479,9 +1562,13 @@
       // Viewport Sync & Dynamic Anti-Overlap Timer Sizing
       // -----------------------------------------------------------------------
       function syncViewportDimensions() {
-        var isPortrait = config.orientation === 'portrait';
-        document.body.classList.toggle('is-portrait', isPortrait);
-        if (isPortrait) {
+        var isTvCw = config.orientation === 'tv-cw';
+        var isTvCcw = config.orientation === 'tv-ccw';
+        var isRotated = isTvCw || isTvCcw;
+        document.body.classList.remove('is-portrait');
+        document.body.classList.toggle('is-tv-cw', isTvCw);
+        document.body.classList.toggle('is-tv-ccw', isTvCcw);
+        if (isRotated) {
           dom.viewport.style.width = window.innerHeight + 'px';
           dom.viewport.style.height = window.innerWidth + 'px';
         } else {
@@ -2353,8 +2440,9 @@
           b.classList.toggle('is-selected', b.getAttribute('data-sound-profile') === config.soundProfile);
         });
 
-        dom.btnOrientLandscape.classList.toggle('is-selected', config.orientation === 'landscape');
-        dom.btnOrientPortrait.classList.toggle('is-selected', config.orientation === 'portrait');
+        dom.btnOrientAuto.classList.toggle('is-selected', config.orientation === 'auto');
+        dom.btnOrientTvCw.classList.toggle('is-selected', config.orientation === 'tv-cw');
+        dom.btnOrientTvCcw.classList.toggle('is-selected', config.orientation === 'tv-ccw');
 
         dom.btnToggleClock.textContent = config.showClock ? 'Exibir Relógio' : 'Relógio Oculto';
         dom.btnToggleClock.classList.toggle('is-selected', config.showClock);
@@ -2365,6 +2453,7 @@
         });
 
         renderCustomAudioStatuses();
+        renderPwaInstallUi();
       }
 
       // -----------------------------------------------------------------------
@@ -2671,18 +2760,36 @@
         showToast('Emblema padrão restaurado.');
       });
 
-      dom.btnOrientLandscape.addEventListener('click', function () {
-        config.orientation = 'landscape';
+      function setOrientationMode(mode) {
+        if (ALLOWED_ORIENTATIONS.indexOf(mode) === -1) return;
+        config.orientation = mode;
         saveConfig();
         applyDisplayPreferences();
         renderSettingsValues();
+        if (mode === 'auto') {
+          showToast('Orientação automática ativada (0°).');
+        } else if (mode === 'tv-cw') {
+          showToast('TV Vertical (+90°) ativada. Use NORMAL (0°) no topo para voltar.');
+        } else {
+          showToast('TV Vertical (−90°) ativada. Use NORMAL (0°) no topo para voltar.');
+        }
+      }
+
+      dom.btnOrientAuto.addEventListener('click', function () {
+        setOrientationMode('auto');
       });
 
-      dom.btnOrientPortrait.addEventListener('click', function () {
-        config.orientation = 'portrait';
-        saveConfig();
-        applyDisplayPreferences();
-        renderSettingsValues();
+      dom.btnOrientTvCw.addEventListener('click', function () {
+        setOrientationMode('tv-cw');
+      });
+
+      dom.btnOrientTvCcw.addEventListener('click', function () {
+        setOrientationMode('tv-ccw');
+      });
+
+      dom.btnQuickResetOrient.addEventListener('click', function () {
+        setOrientationMode('auto');
+        setFocusElement(dom.btnCloseSettings);
       });
 
       dom.btnToggleClock.addEventListener('click', function () {
@@ -2691,6 +2798,127 @@
         applyDisplayPreferences();
         renderSettingsValues();
       });
+
+      // -----------------------------------------------------------------------
+      // Android PWA Installation & Offline Service Worker
+      // -----------------------------------------------------------------------
+      var deferredInstallPrompt = null;
+      var pwaInstalledFlag = false;
+
+      function isStandalonePwa() {
+        if (pwaInstalledFlag) return true;
+        var mqStandalone = typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches;
+        var iosStandalone = window.navigator && window.navigator.standalone === true;
+        return Boolean(mqStandalone || iosStandalone);
+      }
+
+      function isIosSafari() {
+        var ua = (navigator.userAgent || '').toLowerCase();
+        var isIos = /iphone|ipad|ipod/.test(ua);
+        var isSafari = /safari/.test(ua) && !/crios|fxios|edgios|opios/.test(ua);
+        return isIos && isSafari;
+      }
+
+      function renderPwaInstallUi() {
+        if (!dom.rowPwaInstall || !dom.btnInstallPwa || !dom.pwaInstallDesc) return;
+
+        if (window.location && window.location.protocol === 'file:') {
+          dom.rowPwaInstall.style.display = 'none';
+          return;
+        }
+        dom.rowPwaInstall.style.display = '';
+
+        if (isStandalonePwa()) {
+          dom.pwaInstallDesc.textContent = 'Aplicativo já instalado na tela inicial e rodando em modo tela cheia (offline).';
+          dom.btnInstallPwa.textContent = 'App Instalado';
+          dom.btnInstallPwa.disabled = true;
+          dom.btnInstallPwa.classList.remove('is-selected');
+          return;
+        }
+
+        dom.btnInstallPwa.disabled = false;
+        if (deferredInstallPrompt) {
+          dom.pwaInstallDesc.textContent = 'Pronto para instalar na tela inicial do Android em tela cheia e 100% offline.';
+          dom.btnInstallPwa.textContent = 'Instalar App';
+          dom.btnInstallPwa.classList.add('is-selected');
+        } else if (isIosSafari()) {
+          dom.pwaInstallDesc.textContent = 'No iPhone/iPad, toque em Compartilhar e depois em "Adicionar à Tela de Início".';
+          dom.btnInstallPwa.textContent = 'Como Instalar';
+          dom.btnInstallPwa.classList.remove('is-selected');
+        } else {
+          dom.pwaInstallDesc.textContent = 'Toque em Instalar App ou use o menu do Chrome Android ("Instalar aplicativo" / "Adicionar à tela inicial").';
+          dom.btnInstallPwa.textContent = 'Instalar App';
+          dom.btnInstallPwa.classList.add('is-selected');
+        }
+      }
+
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        renderPwaInstallUi();
+      });
+
+      window.addEventListener('appinstalled', function () {
+        deferredInstallPrompt = null;
+        pwaInstalledFlag = true;
+        renderPwaInstallUi();
+        showToast('Luiz Jiu-Jítsu Timer instalado com sucesso!');
+      });
+
+      dom.btnInstallPwa.addEventListener('click', function () {
+        if (isStandalonePwa()) {
+          showToast('O aplicativo já está instalado neste dispositivo.');
+          return;
+        }
+        if (deferredInstallPrompt) {
+          var promptEvent = deferredInstallPrompt;
+          deferredInstallPrompt = null;
+          promptEvent.prompt();
+          if (promptEvent.userChoice && typeof promptEvent.userChoice.then === 'function') {
+            promptEvent.userChoice.then(function (choice) {
+              if (choice && choice.outcome === 'accepted') {
+                pwaInstalledFlag = true;
+                showToast('Instalando Luiz Jiu-Jítsu Timer...');
+              } else {
+                showToast('Instalação cancelada. Você pode instalar depois aqui.');
+              }
+              renderPwaInstallUi();
+            }).catch(function () {
+              renderPwaInstallUi();
+            });
+          } else {
+            renderPwaInstallUi();
+          }
+          return;
+        }
+        if (isIosSafari()) {
+          showToast('Toque no ícone Compartilhar do Safari e escolha "Adicionar à Tela de Início".');
+        } else {
+          showToast('Abra o menu (⋮) do navegador e toque em "Instalar aplicativo" ou "Adicionar à tela inicial".');
+        }
+      });
+
+      window.addEventListener('offline', function () {
+        showToast('Modo offline ativo — o cronômetro continua funcionando normalmente.');
+      });
+
+      window.addEventListener('online', function () {
+        showToast('Conexão restabelecida.');
+      });
+
+      function registerPwaServiceWorker() {
+        if (!('serviceWorker' in navigator)) return;
+        var proto = window.location && window.location.protocol;
+        var host = window.location && window.location.hostname;
+        var isSecureOrigin = proto === 'https:' || host === 'localhost' || host === '127.0.0.1';
+        if (!isSecureOrigin) return;
+
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {
+            // Silently ignore if running inside a restricted WebView without SW support
+          });
+        });
+      }
 
       // Security-hardened APK HTML exporter: strips all foreign/dev scripts, resets runtime DOM, applies air-gapped offline CSP
       dom.btnExportApk.addEventListener('click', function () {
@@ -2733,8 +2961,8 @@
           }
         }
 
-        // Remove any injected external stylesheets or module preloads
-        Array.prototype.slice.call(clone.querySelectorAll('link[rel="stylesheet"], link[rel="modulepreload"]')).forEach(function (lnk) {
+        // Remove external stylesheets, preloads, and relative PWA manifest links in air-gapped APK export
+        Array.prototype.slice.call(clone.querySelectorAll('link[rel="stylesheet"], link[rel="modulepreload"], link[rel="manifest"]')).forEach(function (lnk) {
           lnk.parentNode.removeChild(lnk);
         });
 
@@ -2775,7 +3003,11 @@
         });
 
         var bodyClone = clone.querySelector('body');
-        if (bodyClone) bodyClone.classList.remove('is-portrait');
+        if (bodyClone) {
+          bodyClone.classList.remove('is-portrait');
+          bodyClone.classList.remove('is-tv-cw');
+          bodyClone.classList.remove('is-tv-ccw');
+        }
 
         var htmlString = '<!doctype html>\n' + clone.outerHTML;
         var blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
@@ -2835,16 +3067,24 @@
           return;
         }
 
-        // Map visual UI direction to rotated screen coordinates when in 90deg portrait mode
+        // Map visual UI direction to rotated screen coordinates when TV Vertical rotation is active
         var effectiveDir = direction;
-        if (config.orientation === 'portrait') {
-          var portraitMap = {
+        if (config.orientation === 'tv-cw') {
+          var tvCwMap = {
             up: 'right',
             down: 'left',
             right: 'down',
             left: 'up'
           };
-          effectiveDir = portraitMap[direction] || direction;
+          effectiveDir = tvCwMap[direction] || direction;
+        } else if (config.orientation === 'tv-ccw') {
+          var tvCcwMap = {
+            up: 'left',
+            down: 'right',
+            right: 'up',
+            left: 'down'
+          };
+          effectiveDir = tvCcwMap[direction] || direction;
         }
 
         var currentRect = state.focusedEl.getBoundingClientRect();
@@ -2949,6 +3189,8 @@
       updateLiveClock();
       setInterval(updateLiveClock, 10000);
       renderTimerDisplay();
+      renderPwaInstallUi();
+      registerPwaServiceWorker();
       hydrateCustomAudioOnBoot();
       requestAnimationFrame(fitTimerFont);
       setFocusElement(dom.btnStart);
